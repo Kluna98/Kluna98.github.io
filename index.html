@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>PEC 2 - Visualización de datos</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">PEC 2 - Visualización de datos</h1>
+
+</div>
+
+
+<p>El objetivo de esta actividad es crear tres pequeñas visualizaciones
+usando técnicas diferentes, en nuestro han sido: dot-density-map,
+cicular-dendrogram y UpSet (intersecting sets).</p>
+<div id="dot-density-map" class="section level1">
+<h1>Dot density map</h1>
+<p>Los mapas de densidad de puntos son una forma simple de mostrar las
+diferencias de densidad en las distribuciones geográficas en un
+territorio. Este tipo de visualizacion fue y es muy popular, debido a
+que es fácil de entender e, intuitivamente, podemos ver donde se agrupan
+los puntos (datos). Hay dos tipos de dot-density-map: los
+uno-a-uno-dot-density-map o uno-a-muchos-dot-density-maps. Un factor
+crítico de este tipo de visualización es que han de ser dibujados en un
+mapa que preserve el tamaño de las área, sino se puede llegar a
+distorsionar la densidad percibida de los puntos.</p>
+<p>Las ventajas de usar este tipo de visualización son: - se puede
+mapear simples conteos/ratios (por ejemplo, número de coches/coches por
+km2) - los datos no necesitan tener vinculado unidades de enumeración -
+funcionan bien en blanco y negro (cuando solo tenemos una clase)</p>
+<p>Algunos ejemplos de conjuntos de datos que podríamos usar este tipo
+de visualizacion: - distribución de McDonalds en USA (1 punto = 1
+McDonald) - número de personas, por comarca, Cataluña, 2020 (1 punto
+10000 personas) - densidad de población por raza/etnia en New York (1
+punto 100 personas)</p>
+<p><img src="dotamapex.png" width="50%" style="display: block; margin: auto;" /></p>
+<div id="limitaciones" class="section level2">
+<h2>Limitaciones</h2>
+<p>Los principales inconvenientes de esta visualización son: - es
+dificil recuperar datos en concreto - las ubicaciones de los puntos son
+al azar en una determinada zona</p>
+</div>
+<div id="tipo-de-datos" class="section level2">
+<h2>Tipo de datos</h2>
+<p>Los datos introducidos son cualitativos (por ejemplo, raza/etnia de
+una persona). Cada dato ha de estar vinculado a un dato geográfico, como
+la latitud y longitud.A parte, de los datos como tal es necesario tener
+un mapa como base para poder representar este tipo de datos.</p>
+<p>La cantidad de datos no es muy relevante, ya que se puede jugar con
+la agrupacion de mas de 1 dato en cada punto.</p>
+</div>
+<div id="implementacion" class="section level2">
+<h2>Implementacion</h2>
+<p>se ha realizado esta visualización en R. El dataset usado para
+representar el ejemplo es <em>Fast Food Restaurants in America</em> y lo
+podemos encontrar en: <a
+href="https://www.kaggle.com/datasets/rishidamarla/fast-food-restaurants-in-america/code?resource=download"
+class="uri">https://www.kaggle.com/datasets/rishidamarla/fast-food-restaurants-in-america/code?resource=download</a></p>
+<p>En este dataset podremos encontrar mas de 10000 diferentes
+restaurantes fast-food localizados en USA.</p>
+<pre class="r"><code>#if (!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
+#if (!require(&quot;sf&quot;)) install.packages(&quot;sf&quot;)
+#if (!require(&quot;maps&quot;)) install.packages(&quot;maps&quot;)</code></pre>
+<p>El primer paso para realizar esta visualización es importar las
+librerias necesaria a RStudio. En este caso, hemos usado
+<em>tidyverse</em>, <em>sf</em> y <em>maps</em>.</p>
+<pre class="r"><code>library(tidyverse) # metapackage of all tidyverse packages
+library(sf)
+library(maps)</code></pre>
+<p>A continuación, se ha importado los datos del dataset mensionado
+anteiormente, y los datos geográficos necesarios para representar los
+Estados Unidos.</p>
+<pre class="r"><code>fastRest_raw &lt;- read.csv(&quot;FastFoodRestaurants.csv&quot;)
+fastRest &lt;- filter(fastRest_raw, longitude &gt; -150 &amp; longitude &lt; -50 &amp; latitude &gt; 23 &amp; latitude &lt; 55)
+states &lt;- st_as_sf(map(&quot;state&quot;, plot = FALSE, fill = TRUE))</code></pre>
+<p>La figura creada es la siguiente:</p>
+<pre class="r"><code>fig &lt;- function(width, height){
+     options(repr.plot.width = width, repr.plot.height = height)
+}
+fig(20,20)
+
+ggplot() + geom_sf(data=states)+ 
+  geom_point(data=fastRest,aes(x = longitude, y = latitude), color = &quot;red&quot;, alpha = 1/10)+
+   theme(legend.position = &quot;none&quot;) + 
+  ggtitle(&quot;Distribution of fast food restaurant in the USA&quot;) + theme(plot.title = element_text(hjust = 0.4)) + 
+  theme(panel.background = element_blank(), panel.grid = element_blank()) +
+  
+  theme(axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank())</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>El mapa obtenido muestra la densidad de restaurantes fast-food. Se
+puede ver que la mayoria de restaurantes fast-food están localizados en
+el Este de USA, con otro foco en California. Esto ha sido sencillo de
+visualizar ya que cuanto mas <em>rojo</em> sea la zona del mapa
+significa que más cantidad de restaurantes fast-food hay en ese
+territorio.</p>
+</div>
+</div>
+<div id="circular-dendrogram" class="section level1">
+<h1>Circular dendrogram</h1>
+<p>Un dendograma es un diagrama que muestra la relación jerárquica entre
+objetos. El uso principal de los dendrogramas es encontrar lamejor
+manera de asignar objetos a los clústeres. Es decir, es una manera de
+visualizar el cluster asignida a cada datos.Los dendrogramas pueden
+ayudar a tomar la decisión de cuantos clústeres hay.</p>
+<p>La ventaja de usar este tipo de visualización son: - es facil de
+visualizar los clusteres a un mismo nivel - facil de recuperar datos</p>
+<p>Por otro lado, los datos han de ser previamente procesados para
+realizar correctamente el cálculo de las distancias. Además, una gran
+cantidad de datos resultaría en una visualización imposible de leer, por
+lo que este tipo de visualización está pensado para datasets
+pequeños.</p>
+<p>Algunos ejemplos de conjuntos de datos que podríamos usar este tipo
+de visualizacion: - clustering de pasises con datos socio-económicos -
+número de personas, por comarca, Cataluña, 2020 (1 punto 10000 personas)
+- densidad de población por raza/etnia en New York (1 punto 100
+personas)</p>
+<p>Los datos usado para representar esta visualización es “Humanitarian
+Aid to Underdeveloped Countries” de Kaggle, el link es: <a
+href="https://www.kaggle.com/code/shrutidandagi/clustering-of-the-countries-help-international/data"
+class="uri">https://www.kaggle.com/code/shrutidandagi/clustering-of-the-countries-help-international/data</a>.</p>
+<pre class="r"><code>set.seed(200)
+dataDend &lt;- read.csv(&quot;Country-data.csv&quot;)[sample(1:167, 70), ] 
+dataScale &lt;- dataDend[,2:10]</code></pre>
+<pre class="r"><code>dataScale &lt;- as.data.frame(scale(dataScale))  # Apply scale function
+rownames(dataScale) &lt;- dataDend$country
+head(dataScale)  </code></pre>
+<pre><code>##                child_mort    exports      health    imports     income
+## Yemen           0.4319299 -0.3989661 -0.47513268 -0.5016458 -0.5919272
+## Nigeria         2.2626285 -0.5495781 -0.51043978 -1.0801499 -0.5612256
+## Czech Republic -0.8820994  0.7546576  0.39149612  0.4681995  0.4995816
+## Burkina Faso    1.9148703 -0.7450532  0.02558618 -0.6649881 -0.7316880
+## Guinea          1.7409912 -0.3893526 -0.55537609 -0.2021848 -0.7426856
+## Kiribati        0.5909051 -0.9341193  1.48922593  1.0467036 -0.7179410
+##                 inflation life_expec  total_fer       gdpp
+## Yemen           1.1126158 -0.2621121  1.2745412 -0.6013265
+## Nigeria         7.0733074 -1.0293458  2.1081534 -0.5445361
+## Czech Republic -0.7430572  0.8339360 -0.9769243  0.4281395
+## Burkina Faso   -0.1321604 -1.3143183  2.1295281 -0.6422490
+## Guinea          0.5565812 -1.3033578  1.7519089 -0.6381846
+## Kiribati       -0.5243502 -1.0074248  0.6831752 -0.5913047</code></pre>
+<pre class="r"><code>library(stats)
+res.dist &lt;- dist(x=dataScale, method=&quot;euclidean&quot;)
+res.hc &lt;- hclust(d =res.dist, method=&quot;complete&quot; )</code></pre>
+<pre class="r"><code>library(factoextra)</code></pre>
+<pre><code>## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
+<pre class="r"><code>fviz_dend(x=res.hc, cex=0.8, lwd=0.8, k=3, 
+          k_colors=&quot;jco&quot;,
+          type = &quot;circular&quot;)</code></pre>
+<pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
+## &quot;none&quot;)` instead.</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="upset-plot" class="section level1">
+<h1>UpSet Plot</h1>
+<p>Alternativa de un Venn Diagram, cuando hay varios sets.</p>
+<pre class="r"><code>#if (!require(&quot;UpSetR&quot;)) install.packages(&quot;UpSetR&quot;)
+library(UpSetR)</code></pre>
+<pre class="r"><code>heartData &lt;- read.csv(&quot;heart_2020_cleaned.csv&quot;)[,c(1,3,4,5,8,13,16,17,18)]
+heartData &lt;- heartData[sample(1:300000, 5000), ]
+personas &lt;- paste(&quot;persona&quot;,1:5000,sep=&quot;&quot;)
+rownames(heartData) &lt;- personas
+
+head(heartData,5)</code></pre>
+<pre><code>##          HeartDisease Smoking AlcoholDrinking Stroke DiffWalking
+## persona1           No      No              No     No          No
+## persona2           No      No              No     No          No
+## persona3           No      No              No     No          No
+## persona4          Yes     Yes              No     No          No
+## persona5           No      No              No     No          No
+##          PhysicalActivity Asthma KidneyDisease SkinCancer
+## persona1              Yes     No            No         No
+## persona2              Yes     No            No         No
+## persona3              Yes     No            No         No
+## persona4              Yes     No            No         No
+## persona5               No    Yes            No         No</code></pre>
+<pre class="r"><code>set.seed(200)
+genes &lt;- paste(&quot;gene&quot;,1:1000,sep=&quot;&quot;)
+x &lt;- list(
+  HeartDisease = rownames(heartData[heartData$HeartDisease == &#39;Yes&#39;,]),
+  Smoking = rownames(heartData[heartData$Smoking == &#39;Yes&#39;,]),
+  AlcoholDrinking = rownames(heartData[heartData$AlcoholDrinking == &#39;Yes&#39;,]),
+  Stroke = rownames(heartData[heartData$Stroke == &#39;Yes&#39;,]),
+  DiffWalking = rownames(heartData[heartData$DiffWalking == &#39;Yes&#39;,]),
+  PhysicalActivity = rownames(heartData[heartData$PhysicalActivity == &#39;Yes&#39;,]),
+  Asthma = rownames(heartData[heartData$Asthma == &#39;Yes&#39;,]),
+  KidneyDisease = rownames(heartData[heartData$KidneyDisease == &#39;Yes&#39;,]),
+  SkinCancer = rownames(heartData[heartData$SkinCancer == &#39;Yes&#39;,])
+  )</code></pre>
+<pre class="r"><code>upset(fromList(x), order.by = &quot;freq&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
